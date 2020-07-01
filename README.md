@@ -18,7 +18,7 @@ Download and unzip Android NDK from [NDK Download](https://developer.android.com
 ## Run cmake
 
 ```
-cmake .
+cmake . -DPDFIUM_ARCH=arm64
 ```
 
 
