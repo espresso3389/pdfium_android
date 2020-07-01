@@ -26,4 +26,4 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build the project
-      run: cmake .
+      run: cmake . -DPDFIUM_ARCH=arm64
