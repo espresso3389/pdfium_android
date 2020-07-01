@@ -1,57 +1,58 @@
 #!/bin/bash -eu
 
-# https://pdfium.googlesource.com/pdfium/+/refs/heads/chromium/4147
-LAST_KNOWN_GOOD_COMMIT=3e36f68831431bf497babc74075cd69af5fd9823
+LAST_KNOWN_GOOD_COMMIT=
 
 scripts_dir=$(cd $(dirname $0) && pwd)
-VCPKG_TARGET_TRIPLET=$1
-# x64 or x86
+ANDROID_ABI=$1
+# arm, arm64, x86, x64,...
 GN_ARCH=$2
-# static or dll
-STATIC_OR_DLL=$3
 # Release or Debug
-REL_OR_DBG=$4
+REL_OR_DBG=$3
 
-DEPOT_DIR=$5
+DEPOT_DIR=$4
 
 export PATH=$DEPOT_DIR:$PATH
 
-IS_SHAREDLIB=false
+# Build .so
+IS_SHAREDLIB=true
+# Not using clang for Android build
+IS_CLANG=false
 
 if [ $REL_OR_DBG = "Release" ]; then
     IS_DEBUG=false
-    DEBUG_DIR_SUFFIX=
+    RELDBG_DIR=release
 else
     IS_DEBUG=true
-    DEBUG_DIR_SUFFIX=/debug
+    RELDBG_DIR=debug
 fi
 
-if [[ $VCPKG_TARGET_TRIPLET == *"osx"* ]]; then
-  IS_CLANG=true
-else
-  IS_CLANG=false
-fi
-
-if [ ! -d pdfium/.git/index ]; then
-    gclient config -vvv --unmanaged https://pdfium.googlesource.com/pdfium.git
+if [ ! -f pdfium/.git/index ]; then
+    #gclient config -vvv --unmanaged https://android.googlesource.com/platform/external/pdfium
+    fetch --nohooks pdfium
     gclient sync -vvv
 fi
 
 cd pdfium
 ROOTDIR=$(pwd)
-BUILDDIR=$ROOTDIR/out/$VCPKG_TARGET_TRIPLET$DEBUG_DIR_SUFFIX
+BUILDDIR=$ROOTDIR/out/$RELDBG_DIR/$ANDROID_ABI
 
 mkdir -p $BUILDDIR
 
-git reset --hard
-git checkout $LAST_KNOWN_GOOD_COMMIT
+if [ ! "$LAST_KNOWN_GOOD_COMMIT" = "" ]; then
+  git reset --hard
+  git checkout $LAST_KNOWN_GOOD_COMMIT
+fi
 
-echo "Applying annot_render.patch..."
-git apply -v $scripts_dir/annot_render.patch
+# echo "Applying annot_render.patch..."
+# git apply -v $scripts_dir/annot_render.patch
+
+# Wow, in normal environment, it causes privilege error...
+./build/install-build-deps-android.sh
 
 cat <<EOF > $BUILDDIR/args.gn
 is_clang = $IS_CLANG
 use_custom_libcxx=false
+target_os = "android"
 target_cpu = "$GN_ARCH"
 pdf_is_complete_lib = true
 pdf_is_standalone = true
