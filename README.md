@@ -21,12 +21,7 @@ Download and unzip Android NDK from [NDK Download](https://developer.android.com
 cmake . -DPDFIUM_ARCH=arm64
 ```
 
-
-## Troubleshooting
-
-If you're on WSL2, you may encounter snapd issues. The following project provides a workaround for the issue:
-
-https://github.com/DamionGans/ubuntu-wsl2-systemd-script
+The script may prompt you to input your password to sudo-install certain prerequisites packages (see [Install additional build dependencies - Checking out and building Chromium for Android](https://chromium.googlesource.com/chromium/src/+/master/docs/android_build_instructions.md#install-additional-build-dependencies) for more).
 
 ## References
 
