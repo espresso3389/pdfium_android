@@ -1,0 +1,13 @@
+diff --git a/fpdfsdk/cpdfsdk_renderpage.cpp b/fpdfsdk/cpdfsdk_renderpage.cpp
+index ae2fdfa08..776c897aa 100644
+--- a/fpdfsdk/cpdfsdk_renderpage.cpp
++++ b/fpdfsdk/cpdfsdk_renderpage.cpp
+@@ -71,7 +71,7 @@ void RenderPageImpl(CPDF_PageRenderContext* pContext,
+     bool bPrinting =
+         pContext->m_pDevice->GetDeviceType() != DeviceType::kDisplay;
+     pList->DisplayAnnots(pPage, pContext->m_pContext.get(), bPrinting, &matrix,
+-                         false, nullptr);
++                         true, nullptr);
+   }
+ 
+   pContext->m_pRenderer = pdfium::MakeUnique<CPDF_ProgressiveRenderer>(
