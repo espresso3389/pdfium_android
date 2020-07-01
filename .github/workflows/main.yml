@@ -32,4 +32,5 @@ jobs:
     - name: Build the project
       run: |
         sudo mkdir -p /usr/share/man/man1
+        sudo apt install openjdk-8-jre-headless
         cmake . -DPDFIUM_ARCH=arm64
