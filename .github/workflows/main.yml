@@ -25,7 +25,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    # - name: Setup tmate session
+    #   uses: mxschmitt/action-tmate@v2
+
+    # https://github.com/geerlingguy/ansible-role-java/issues/64#issuecomment-393299088
     - name: Build the project
       run: |
-        sudo apt remove lighttpd -y
+        sudo mkdir -p /usr/share/man/man1
         cmake . -DPDFIUM_ARCH=arm64
