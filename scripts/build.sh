@@ -29,6 +29,7 @@ fi
 if [ ! -f pdfium/.git/index ]; then
     #gclient config -vvv --unmanaged https://android.googlesource.com/platform/external/pdfium
     fetch --nohooks pdfium
+    echo "target_os = [ 'android' ]" >> .gclient
     gclient sync -vvv
 fi
 
