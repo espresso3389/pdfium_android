@@ -47,14 +47,14 @@ fi
 # git apply -v $scripts_dir/annot_render.patch
 
 # Wow, in normal environment, it causes privilege error...
-./build/install-build-deps-android.sh
+./build/install-build-deps-android.sh || true
 
 cat <<EOF > $BUILDDIR/args.gn
 is_clang = $IS_CLANG
 use_custom_libcxx=false
 target_os = "android"
 target_cpu = "$GN_ARCH"
-pdf_is_complete_lib = true
+pdf_is_complete_lib = false
 pdf_is_standalone = true
 is_component_build = $IS_SHAREDLIB
 is_debug = $IS_DEBUG
