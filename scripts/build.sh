@@ -13,10 +13,10 @@ DEPOT_DIR=$4
 
 export PATH=$DEPOT_DIR:$PATH
 
-# Build .so
+# generating shared library (.so)
 IS_SHAREDLIB=true
-# Not using clang for Android build
-IS_CLANG=false
+# using clang
+IS_CLANG=true
 
 if [ $REL_OR_DBG = "Release" ]; then
     IS_DEBUG=false
@@ -47,7 +47,7 @@ fi
 # echo "Applying annot_render.patch..."
 # git apply -v $scripts_dir/annot_render.patch
 
-# Wow, in normal environment, it causes privilege error...
+# installation may fail but it does not affect the actual build process I guess
 ./build/install-build-deps-android.sh || true
 
 cat <<EOF > $BUILDDIR/args.gn
